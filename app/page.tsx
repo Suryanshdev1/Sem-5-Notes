@@ -31,9 +31,9 @@ export default async function Home() {
     <div className="space-y-10">
       <div className="space-y-3 text-center">
         <h2 className="text-4xl leading-tight sm:text-5xl">
-          Study smart.
+          Because your GPA
           <br />
-          Find anything.
+          is currently fucked.
         </h2>
         <p className="font-medium text-ink/70">
           Access all your PDFs, PPTs, and notes
