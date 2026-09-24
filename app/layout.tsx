@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navbar from '../components/Navbar';
+import { Analytics } from '@vercel/analytics/react';
 
 const grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -37,6 +38,7 @@ export default function RootLayout({
         <footer className="mt-auto border-t-2 border-ink bg-nb-yellow py-4 text-center text-sm font-bold">
           Made with ❤️ by Suryansh
         </footer>
+        <Analytics />
       </body>
     </html>
   );
