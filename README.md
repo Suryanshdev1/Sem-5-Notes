@@ -53,7 +53,7 @@ To run this project locally:
 
 ## 💡 Motivation
 
-Built to replace the inefficient workflow of forwarding university notes to personal WhatsApp numbers. Now, classmates like Sujal, Pari, Pratiksha, Shahwaz, and Swayam can directly access organized resources right before the end-sem exams.
+Built to replace the inefficient workflow of forwarding university notes to personal WhatsApp numbers. Now, my classmates can directly access organized resources right before the end-sem exams.
 
 ---
 
