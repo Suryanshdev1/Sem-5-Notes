@@ -1,6 +1,6 @@
 'use client';
 
-import { supabase } from '@/lib/supabase';
+import { createBrowserClient } from '@supabase/ssr';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -20,6 +20,12 @@ export default function ManageNotesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
+  // Browser client initialize karna zaroori hai taaki admin cookies Supabase tak pahuchein
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -34,7 +40,6 @@ export default function ManageNotesPage() {
     setLoading(false);
   };
 
-  // 2. Multi-select handlers
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setSelectedIds(notes.map(n => n.id));
@@ -51,7 +56,6 @@ export default function ManageNotesPage() {
     }
   };
 
-  // 1. Fixed Single Delete
   const handleDelete = async (id: string, fileUrl: string) => {
     const confirmDelete = window.confirm('Kya aap is note ko permanently delete karna chahte hain?');
     if (!confirmDelete) return;
@@ -64,19 +68,17 @@ export default function ManageNotesPage() {
       }
 
       const { error } = await supabase.from('notes').delete().eq('id', id);
-      if (error) throw error;
+      if (error) throw error; // Ab agar auth fail hoga toh yahan exact error aayegi
 
-      // Functional state update se React instantly UI refresh karega
       setNotes(prev => prev.filter(note => note.id !== id));
       setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
-      router.refresh(); // Next.js server cache clear karne ke liye
+      router.refresh(); 
     } catch (error) {
-      alert('Error deleting note. Please try again.');
+      alert('Error deleting note. Please check your admin session.');
       console.error(error);
     }
   };
 
-  // 2. Multi-Delete Execution
   const handleMultiDelete = async () => {
     if (selectedIds.length === 0) return;
     const confirmDelete = window.confirm(`Kya aap sach mein in ${selectedIds.length} notes ko delete karna chahte hain?`);
@@ -86,7 +88,6 @@ export default function ManageNotesPage() {
     try {
       const notesToDelete = notes.filter(n => selectedIds.includes(n.id));
       
-      // Storage files delete karo loop mein
       for (const note of notesToDelete) {
         const urlParts = note.file_url.split('/notes-files/');
         if (urlParts.length === 2) {
@@ -95,7 +96,6 @@ export default function ManageNotesPage() {
         }
       }
 
-      // Database se ek sath delete karo
       const { error } = await supabase.from('notes').delete().in('id', selectedIds);
       if (error) throw error;
 
@@ -140,7 +140,6 @@ export default function ManageNotesPage() {
           No notes have been uploaded yet.
         </div>
       ) : (
-        // 3. overflow-x-auto lagaya mobile par horizontal scroll ke liye
         <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
           <div className="overflow-x-auto w-full">
             <table className="min-w-full divide-y divide-gray-200">
