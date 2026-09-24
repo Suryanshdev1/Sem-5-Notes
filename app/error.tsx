@@ -16,26 +16,22 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-24 space-y-5 text-center px-4">
-      <div className="text-red-500 text-6xl mb-2">⚠️</div>
-      <h2 className="text-3xl font-bold text-gray-900">Oops! Something went wrong</h2>
-      <p className="text-gray-500 max-w-md">
-        We couldn't load the requested notes. It might be a network issue or a temporary database glitch.
-      </p>
-      
-      <div className="flex gap-4 mt-6">
-        <button
-          onClick={() => reset()}
-          className="px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Try Again
-        </button>
-        <Link 
-          href="/" 
-          className="px-5 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          Return Home
-        </Link>
+    <div className="flex items-center justify-center px-4 py-16">
+      <div className="nb-card max-w-lg space-y-5 bg-nb-pink p-8 text-center">
+        <div className="nb-icon mx-auto h-16 w-16 bg-white text-4xl">⚠️</div>
+        <h2 className="text-3xl">Oops! Something went wrong</h2>
+        <p className="font-medium">
+          We couldn't load the requested notes. It might be a network issue or a temporary database glitch.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4 pt-2">
+          <button onClick={() => reset()} className="nb-btn bg-nb-yellow px-5">
+            Try Again
+          </button>
+          <Link href="/" className="nb-btn bg-white px-5">
+            Return Home
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export default function ManageNotesPage() {
       .from('notes')
       .select('id, title, unit, file_url, subjects(name)')
       .order('created_at', { ascending: false });
-      
+
     setNotes((data as unknown as Note[]) || []);
     setLoading(false);
   };
@@ -72,7 +72,7 @@ export default function ManageNotesPage() {
 
       setNotes(prev => prev.filter(note => note.id !== id));
       setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
-      router.refresh(); 
+      router.refresh();
     } catch (error) {
       alert('Error deleting note. Please check your admin session.');
       console.error(error);
@@ -87,7 +87,7 @@ export default function ManageNotesPage() {
     setIsDeleting(true);
     try {
       const notesToDelete = notes.filter(n => selectedIds.includes(n.id));
-      
+
       for (const note of notesToDelete) {
         const urlParts = note.file_url.split('/notes-files/');
         if (urlParts.length === 2) {
@@ -112,79 +112,97 @@ export default function ManageNotesPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between border-b pb-4 flex-wrap gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-ink pb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Manage Uploaded Notes</h2>
-          <p className="text-gray-500 mt-1">Review and delete files from your repository.</p>
+          <h2 className="text-3xl">Manage Uploaded Notes</h2>
+          <p className="mt-1 font-medium text-ink/70">
+            Review and delete files from your repository.
+          </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3">
           {selectedIds.length > 0 && (
-            <button 
+            <button
               onClick={handleMultiDelete}
               disabled={isDeleting}
-              className="text-sm font-medium bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+              className="nb-btn bg-nb-pink px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-nb"
             >
               {isDeleting ? 'Deleting...' : `Delete Selected (${selectedIds.length})`}
             </button>
           )}
-          <Link href="/admin" className="text-sm font-medium text-blue-600 hover:underline">
+          <Link href="/admin" className="nb-btn bg-nb-blue px-3 py-1.5 text-sm">
             ← Back to Upload
           </Link>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500">Loading notes...</div>
+        <div className="nb-card bg-white py-10 text-center font-bold">
+          Loading notes...
+        </div>
       ) : notes.length === 0 ? (
-        <div className="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300">
+        <div className="nb-card border-dashed bg-white py-10 text-center font-bold text-ink/70">
           No notes have been uploaded yet.
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-          <div className="overflow-x-auto w-full">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+        <div className="nb-card overflow-hidden">
+          <div className="w-full overflow-x-auto">
+            <table className="min-w-full divide-y-2 divide-ink">
+              <thead className="bg-nb-yellow">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <input 
-                      type="checkbox" 
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  <th className="px-6 py-3 text-left text-xs font-extrabold uppercase tracking-wider">
+                    <input
+                      type="checkbox"
+                      className="h-5 w-5 cursor-pointer accent-ink"
                       checked={notes.length > 0 && selectedIds.length === notes.length}
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-extrabold uppercase tracking-wider">Title</th>
+                  <th className="px-6 py-3 text-left text-xs font-extrabold uppercase tracking-wider">Subject</th>
+                  <th className="px-6 py-3 text-left text-xs font-extrabold uppercase tracking-wider">Unit</th>
+                  <th className="px-6 py-3 text-right text-xs font-extrabold uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y-2 divide-ink bg-white">
                 {notes.map((note) => (
-                  <tr key={note.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input 
-                        type="checkbox" 
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  <tr
+                    key={note.id}
+                    className={
+                      selectedIds.includes(note.id)
+                        ? 'bg-nb-yellow/40'
+                        : 'hover:bg-nb-yellow/20'
+                    }
+                  >
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5 cursor-pointer accent-ink"
                         checked={selectedIds.includes(note.id)}
                         onChange={(e) => handleSelectOne(e, note.id)}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-[200px]">
-                      <a href={note.file_url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
+                    <td className="max-w-[200px] truncate whitespace-nowrap px-6 py-4 text-sm font-bold">
+                      <Link
+                        href={note.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline decoration-2 underline-offset-2 hover:bg-nb-yellow"
+                      >
                         {note.title}
-                      </a>
+                      </Link>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-ink/70">
                       {note.subjects?.name || 'Unknown'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className="bg-gray-100 px-2 py-1 rounded-md">{note.unit}</span>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm">
+                      <span className="rounded border-2 border-ink bg-nb-blue px-2 py-0.5 text-xs font-extrabold">
+                        {note.unit}
+                      </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button 
+                    <td className="whitespace-nowrap px-6 py-4 text-right">
+                      <button
                         onClick={() => handleDelete(note.id, note.file_url)}
-                        className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors"
+                        className="nb-btn bg-nb-pink px-3 py-1.5 text-sm"
                       >
                         Delete
                       </button>

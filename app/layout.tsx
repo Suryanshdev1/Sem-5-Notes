@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navbar from '../components/Navbar';
 
-const inter = Inter({ subsets: ['latin'] });
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-grotesk',
+});
 
 export const metadata: Metadata = {
-  
   title: 'Sem 5 Notes',
   description: 'Centralized repository for Semester 5 study materials, PDFs, and PYQs.',
   openGraph: {
@@ -23,18 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-gray-50 text-gray-900 min-h-screen flex flex-col`}>
+    <html lang="en" className={grotesk.variable}>
+      <body className="min-h-screen flex flex-col">
         {/* Dynamic Navbar with Auth State */}
         <Navbar />
-        
+
         <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
           {children}
         </main>
 
-        <footer className="py-6 text-center text-sm text-gray-400 border-t mt-auto">
-  Made with ❤️ by Suryansh
-</footer>
+        <footer className="mt-auto border-t-2 border-ink bg-nb-yellow py-4 text-center text-sm font-bold">
+          Made with ❤️ by Suryansh
+        </footer>
       </body>
     </html>
   );

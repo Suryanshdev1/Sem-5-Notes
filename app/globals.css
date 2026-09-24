@@ -2,7 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar behavior for a cleaner look */
+:root {
+  --background: #fffbf0; /* cream */
+  --foreground: #111111;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3 {
+    @apply font-extrabold tracking-tight;
+  }
+  ::selection {
+    @apply bg-nb-yellow text-ink;
+  }
+}
+
+@layer components {
+  /* Card */
+  .nb-card {
+    @apply rounded-lg border-2 border-ink bg-white shadow-nb transition-all;
+  }
+  .nb-card-hover {
+    @apply hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-nb-lg;
+  }
+
+  /* Button */
+  .nb-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-ink bg-nb-yellow px-4 py-2 font-bold text-ink shadow-nb transition-all
+           hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-nb-lg
+           active:translate-x-1 active:translate-y-1 active:shadow-none;
+  }
+
+  /* Input */
+  .nb-input {
+    @apply w-full rounded-lg border-2 border-ink bg-white px-3 py-2 font-medium shadow-nb-sm outline-none transition-all
+           placeholder:text-ink/50 focus:shadow-nb;
+  }
+
+  /* Small badge like the "NEW" tag */
+  .nb-badge {
+    @apply inline-block rounded border-2 border-ink bg-nb-pink px-1.5 py-0.5 text-[10px] font-extrabold uppercase;
+  }
+
+  /* Square icon box */
+  .nb-icon {
+    @apply flex h-10 w-10 items-center justify-center rounded-md border-2 border-ink;
+  }
+}
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;

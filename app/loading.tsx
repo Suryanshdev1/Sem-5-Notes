@@ -1,9 +1,11 @@
 export default function Loading() {
   return (
-    <div className="flex flex-col items-center justify-center py-32 space-y-4">
-      {/* Tailwind CSS Spinner */}
-      <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
-      <p className="text-gray-500 font-medium">Loading Sem 5 Notes...</p>
+    <div className="flex items-center justify-center py-24">
+      <div className="nb-card flex flex-col items-center space-y-4 bg-nb-yellow px-10 py-8">
+        {/* Spinner */}
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-ink border-t-transparent"></div>
+        <p className="font-extrabold uppercase tracking-wide">Loading Sem 5 Notes...</p>
+      </div>
     </div>
   );
 }

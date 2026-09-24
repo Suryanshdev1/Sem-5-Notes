@@ -12,17 +12,19 @@ export default async function AdminPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-ink pb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Admin Dashboard</h2>
-          <p className="text-gray-500 mt-1">Upload new notes, PDFs, or PPTs to Sem 5 Notes.</p>
+          <h2 className="text-3xl">Admin Dashboard</h2>
+          <p className="mt-1 font-medium text-ink/70">
+            Upload new notes, PDFs, or PPTs to Sem 5 Notes.
+          </p>
         </div>
-        <Link href="/" className="text-sm font-medium text-blue-600 hover:underline">
+        <Link href="/" className="nb-btn bg-nb-blue px-3 py-1.5 text-sm">
           View Live Site →
         </Link>
       </div>
-      
-      <div className="bg-white p-6 rounded-xl border shadow-sm">
+
+      <div className="nb-card bg-nb-yellow/30 p-6">
         <UploadForm subjects={subjects || []} />
       </div>
     </div>

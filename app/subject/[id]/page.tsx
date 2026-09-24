@@ -6,7 +6,7 @@ export const revalidate = 0;
 
 export default async function SubjectPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  
+
   const { data: subject } = await supabase
     .from('subjects')
     .select('*')
@@ -21,7 +21,7 @@ export default async function SubjectPage({ params }: { params: { id: string } }
 
   if (!subject) {
     return (
-      <div className="text-center py-10 bg-red-50 text-red-600 rounded-lg">
+      <div className="nb-card bg-nb-pink py-10 text-center font-bold">
         Subject nahi mila. Link check karein.
       </div>
     );
@@ -29,18 +29,23 @@ export default async function SubjectPage({ params }: { params: { id: string } }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-4 mb-8">
-        <Link href="/" className="text-gray-500 hover:text-blue-600 transition font-medium">
+      <div className="mb-8 space-y-4">
+        <Link href="/" className="nb-btn bg-white px-3 py-1.5 text-sm">
           ← Back to Subjects
         </Link>
-        <h2 className="text-3xl font-bold flex items-center gap-2">
-          <span>{subject.icon}</span> {subject.name} Notes
+        <h2 className="flex items-center gap-3 text-3xl sm:text-4xl">
+          <span className="nb-icon h-12 w-12 bg-nb-yellow text-2xl">
+            {subject.icon || '📘'}
+          </span>
+          {subject.name} Notes
         </h2>
       </div>
 
       {(!notes || notes.length === 0) ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
-          <p className="text-gray-500">Is subject ke liye abhi koi notes upload nahi hue hain.</p>
+        <div className="nb-card border-dashed bg-white py-16 text-center">
+          <p className="font-bold text-ink/70">
+            Is subject ke liye abhi koi notes upload nahi hue hain.
+          </p>
         </div>
       ) : (
         <SubjectNoteList initialNotes={notes} />

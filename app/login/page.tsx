@@ -37,49 +37,58 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Admin Access</h2>
-        <p className="text-gray-500 mt-2">Login to manage Sem 5 Notes</p>
-      </div>
-
-      <form onSubmit={handleLogin} className="space-y-5">
-        {error && (
-          <div className="p-3 bg-red-50 text-red-700 text-sm font-medium rounded-md">
-            {error}
+    <div className="mx-auto mt-10 max-w-md sm:mt-16">
+      <div className="nb-card bg-nb-purple/30 p-6 sm:p-8">
+        <div className="mb-8 text-center">
+          <div className="nb-icon mx-auto mb-4 h-14 w-14 bg-nb-yellow text-2xl">
+            🔐
           </div>
-        )}
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-          <input 
-            type="email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-            required 
-          />
+          <h2 className="text-3xl">Admin Access</h2>
+          <p className="mt-2 font-medium text-ink/70">Login to manage Sem 5 Notes</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-          <input 
-            type="password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-            required 
-          />
-        </div>
+        <form onSubmit={handleLogin} className="space-y-5">
+          {error && (
+            <div className="rounded-lg border-2 border-ink bg-nb-pink p-3 text-sm font-bold shadow-nb-sm">
+              {error}
+            </div>
+          )}
 
-        <button 
-          type="submit" 
-          disabled={loading} 
-          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4"
-        >
-          {loading ? 'Authenticating...' : 'Secure Login'}
-        </button>
-      </form>
+          <div>
+            <label className="mb-1 block text-sm font-extrabold uppercase tracking-wide">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="nb-input"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-extrabold uppercase tracking-wide">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="nb-input"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="nb-btn mt-4 w-full bg-nb-green py-3 text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-nb"
+          >
+            {loading ? 'Authenticating...' : 'Secure Login'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

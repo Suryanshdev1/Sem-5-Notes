@@ -8,42 +8,54 @@ interface Note {
   created_at: string;
 }
 
+// Full class names on purpose: Tailwind can't detect classes built dynamically
+const TYPE_COLORS: Record<string, string> = {
+  PDF: 'bg-nb-pink',
+  PPT: 'bg-nb-orange',
+  PPTX: 'bg-nb-orange',
+  DOC: 'bg-nb-blue',
+  DOCX: 'bg-nb-blue',
+  JPG: 'bg-nb-purple',
+  PNG: 'bg-nb-purple',
+};
+
 export default function NoteCard({ note }: { note: Note }) {
   const date = new Date(note.created_at).toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'short',
-    year: 'numeric'
+    year: 'numeric',
   });
 
   // Supabase URL par ?download lagane se file seedha download ho jati hai
   const downloadUrl = `${note.file_url}?download=`;
 
+  const badgeColor = TYPE_COLORS[note.file_type?.toUpperCase()] || 'bg-nb-yellow';
+
   return (
-    <div className="p-5 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all">
-      <div className="flex justify-between items-start mb-3">
-        <span className="inline-block text-xs font-semibold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md uppercase">
+    <div className="nb-card nb-card-hover p-5">
+      <div className="mb-3 flex items-start justify-between">
+        <span
+          className={`inline-block rounded border-2 border-ink px-2 py-0.5 text-xs font-extrabold uppercase ${badgeColor}`}
+        >
           {note.file_type}
         </span>
-        <span className="text-xs text-gray-400 font-medium">{date}</span>
+        <span className="text-xs font-bold text-ink/60">{date}</span>
       </div>
-      
-      <h3 className="text-lg font-semibold text-gray-800 mt-2 mb-4 truncate" title={note.title}>
+
+      <h3 className="mb-4 mt-2 truncate text-lg" title={note.title}>
         {note.title}
       </h3>
-      
+
       <div className="flex gap-3">
-        <Link 
+        <Link
           href={note.file_url}
           target="_blank"
-          rel="noopener noreferrer" 
-          className="flex-1 flex items-center justify-center py-2.5 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 rounded-lg font-semibold transition-colors"
+          rel="noopener noreferrer"
+          className="nb-btn flex-1 bg-nb-blue"
         >
           View
         </Link>
-        <a 
-          href={downloadUrl}
-          className="flex-1 flex items-center justify-center py-2.5 bg-green-50 hover:bg-green-600 hover:text-white text-green-600 rounded-lg font-semibold transition-colors"
-        >
+        <a href={downloadUrl} className="nb-btn flex-1 bg-nb-green">
           Download
         </a>
       </div>

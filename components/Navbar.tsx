@@ -14,7 +14,7 @@ export default function Navbar() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAdmin(!!session);
     });
-    
+
     // Listen for login/logout events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAdmin(!!session);
@@ -30,30 +30,33 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b sticky top-0 z-10">
-      <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold text-blue-600">
-          Sem 5 Notes
+    <header className="sticky top-0 z-50 border-b-2 border-ink bg-background">
+      <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
+        <Link
+          href="/"
+          className="nb-btn bg-nb-yellow px-3 py-1.5 text-base sm:text-lg"
+        >
+          📚 Sem 5 Notes
         </Link>
-        
-        <nav className="space-x-5 flex items-center">
+
+        <nav className="flex flex-wrap items-center justify-end gap-2">
           {isAdmin ? (
             <>
-              <Link href="/admin" className="text-sm font-semibold text-gray-600 hover:text-blue-600">
+              <Link href="/admin" className="nb-btn bg-nb-green px-3 py-1.5 text-sm">
                 Upload
               </Link>
-              <Link href="/admin/manage" className="text-sm font-semibold text-gray-600 hover:text-blue-600">
+              <Link href="/admin/manage" className="nb-btn bg-nb-blue px-3 py-1.5 text-sm">
                 Manage
               </Link>
-              <button 
-                onClick={handleLogout} 
-                className="text-sm font-semibold text-red-600 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-md transition-colors"
+              <button
+                onClick={handleLogout}
+                className="nb-btn bg-nb-pink px-3 py-1.5 text-sm"
               >
                 Logout
               </button>
             </>
           ) : (
-            <Link href="/login" className="text-sm font-medium text-gray-500 hover:text-gray-900">
+            <Link href="/login" className="nb-btn bg-white px-3 py-1.5 text-sm">
               Admin Login
             </Link>
           )}
