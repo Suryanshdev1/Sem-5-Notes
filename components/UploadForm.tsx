@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 
 interface Subject {
@@ -13,6 +13,12 @@ export default function UploadForm({ subjects }: { subjects: Subject[] }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
+
+  // Browser client initialize karna zaroori hai taaki admin cookies Supabase tak pahuchein
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,10 +36,9 @@ export default function UploadForm({ subjects }: { subjects: Subject[] }) {
     }
 
     try {
-      // Loop lagakar sabhi files ko ek-ek karke upload karna
       for (const file of files) {
         const fileExt = file.name.split('.').pop();
-        const originalName = file.name.replace(`.${fileExt}`, '');
+        const originalName = file.name.replace(`.${fileExt}`, ''); 
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `${subjectId}/${fileName}`;
 
@@ -47,21 +52,20 @@ export default function UploadForm({ subjects }: { subjects: Subject[] }) {
           .from('notes-files')
           .getPublicUrl(filePath);
 
-        // Database me original file name ko as a title save karna
         const { error: dbError } = await supabase.from('notes').insert({
           subject_id: subjectId,
-          unit: 'General', // Database schema satisfy karne ke liye default value
-          title: originalName,
+          unit: 'General', 
+          title: originalName, 
           file_url: publicUrlData.publicUrl,
           file_type: fileExt?.toUpperCase() || 'UNKNOWN',
         });
 
-        if (dbError) throw dbError;
+        if (dbError) throw dbError; // Ab directly pakad mein aayega agar insert fail hua
       }
 
       setMessage({ text: 'All files uploaded successfully! ✅', type: 'success' });
       (e.target as HTMLFormElement).reset();
-      router.refresh();
+      router.refresh(); 
     } catch (error: any) {
       setMessage({ text: error.message || 'Upload failed.', type: 'error' });
     } finally {
@@ -72,20 +76,14 @@ export default function UploadForm({ subjects }: { subjects: Subject[] }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {message.text && (
-        <div
-          className={`rounded-lg border-2 border-ink p-3 text-sm font-bold shadow-nb-sm ${
-            message.type === 'error' ? 'bg-nb-pink' : 'bg-nb-green'
-          }`}
-        >
+        <div className={`p-3 rounded-md text-sm font-medium ${message.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
           {message.text}
         </div>
       )}
 
       <div>
-        <label className="mb-1 block text-sm font-extrabold uppercase tracking-wide">
-          Subject
-        </label>
-        <select name="subject_id" className="nb-input cursor-pointer" required>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">Subject</label>
+        <select name="subject_id" className="w-full border-gray-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
           <option value="">Select a subject...</option>
           {subjects.map((s) => (
             <option key={s.id} value={s.id}>{s.name}</option>
@@ -94,25 +92,18 @@ export default function UploadForm({ subjects }: { subjects: Subject[] }) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-extrabold uppercase tracking-wide">
-          Upload Files
-        </label>
-        {/* 'multiple' attribute add kiya gaya aur name ko 'files' kar diya gaya */}
-        <input
-          type="file"
-          name="files"
+        <label className="block text-sm font-semibold text-gray-700 mb-1">Upload Files</label>
+        <input 
+          type="file" 
+          name="files" 
           multiple
-          accept=".pdf,.ppt,.pptx,.doc,.docx,.jpg,.png"
-          className="nb-input cursor-pointer file:mr-4 file:cursor-pointer file:rounded-md file:border-2 file:border-ink file:bg-nb-yellow file:px-3 file:py-1 file:text-sm file:font-bold file:text-ink"
-          required
+          accept=".pdf,.ppt,.pptx,.doc,.docx,.jpg,.png" 
+          className="w-full border-gray-300 rounded-lg p-2 border file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" 
+          required 
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="nb-btn w-full bg-nb-green py-3 text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-nb"
-      >
+      <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50">
         {loading ? 'Uploading files...' : 'Upload Notes'}
       </button>
     </form>
